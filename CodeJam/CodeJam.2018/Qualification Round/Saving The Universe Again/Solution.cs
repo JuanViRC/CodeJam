@@ -6,11 +6,25 @@ using System.Text.RegularExpressions;
 
 namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
 {
-    public class Solution
+
+    public class Program
     {
 
-        private readonly StringReader input;
-        private readonly StringWriter output;
+        static void Main(string[] args)
+        {
+            var probleQR1 = new Solution(Console.In, Console.Out);
+            probleQR1.Start();
+
+            Console.ReadKey();
+        }
+    }
+
+    public class Solution
+    {
+        private readonly TextReader input;
+        private readonly TextWriter output;
+
+        private readonly Regex testCaseRegex = new Regex(@"(?<Shield>\d)+\s(?<RobotCommands>[SC]+)");
 
         public int TestNumber { get; set; }
         public int HacksNumber { get; set; }
@@ -18,79 +32,35 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
         public StringBuilder RobotCommands { get; set; }
         public int Shield { get; set; }
 
-        private class TestData
-        {
-            public int Shield { get; set; }
-            public string RobotCommands { get; set; }
-        }
-
-        private class ImpossibleException : Exception { }
-
-        private IEnumerable<TestData> GetProblemTests()
-        {
-            var tests = new List<TestData>();
-            tests.Add(new TestData
-            {
-                Shield = 1,
-                RobotCommands = "CS"
-            });
-            tests.Add(new TestData
-            {
-                Shield = 2,
-                RobotCommands = "CS"
-            });
-            tests.Add(new TestData
-            {
-                Shield = 1,
-                RobotCommands = "SS"
-            });
-            tests.Add(new TestData
-            {
-                Shield = 6,
-                RobotCommands = "SCCSSC"
-            });
-            tests.Add(new TestData
-            {
-                Shield = 2,
-                RobotCommands = "CC"
-            });
-            tests.Add(new TestData
-            {
-                Shield = 3,
-                RobotCommands = "CSCSS"
-            });
-
-            return tests;
-        }
-
-        public Solution(StringReader input, StringWriter output)
+        public Solution(TextReader input, TextWriter output)
         {
             this.input = input;
-            this.output = output;            
+            this.output = output;
         }
 
         public void Start()
         {
-            input.ReadLine(); // Line with number of test cases
+            int testCasesNumber = int.Parse(input.ReadLine());
 
-            TestNumber = 0;
-
-            var expression = new Regex(@"(?<Shield>\d)+\s(?<RobotCommands>[SC]+)");
-            string line;
-
-            while(!string.IsNullOrEmpty(line = input.ReadLine()))
+            for (TestNumber = 0; TestNumber <= testCasesNumber; TestNumber++)
             {
-                var match = expression.Match(line);
-                var test = new TestData
-                {
-                    Shield = int.Parse(match.Groups["middle"].Value),
-                    RobotCommands = match.Groups["RobotCommands"].Value
-                };
-
                 TestNumber++;
+
+                var line = input.ReadLine();
+                var test = ConstructTestData(line);
 
                 Solve(test);
             }
+        }
+
+        private TestData ConstructTestData(string stringData)
+        {
+            var match = testCaseRegex.Match(stringData);
+            return new TestData
+            {
+                Shield = int.Parse(match.Groups["Shield"].Value),
+                RobotCommands = match.Groups["RobotCommands"].Value
+            };
         }
 
         private void Solve(TestData test)
@@ -98,7 +68,7 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
             InitTestData(test);
 
             while (true)
-            {                
+            {
                 try
                 {
                     if (CanWeSurvive()) break;
@@ -123,10 +93,10 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
 
             for (var i = 1; i < RobotCommands.Length; i++)
             {
-                if (RobotCommands[i] == 'S' && RobotCommands[i-1] == 'C')
+                if (RobotCommands[i] == 'S' && RobotCommands[i - 1] == 'C')
                 {
                     RobotCommands[i] = 'C';
-                    RobotCommands[i-1] = 'S';
+                    RobotCommands[i - 1] = 'S';
                     HacksNumber++;
                     break;
                 }
@@ -188,4 +158,50 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
         }
 
     }
+
+
+    public class TestData
+    {
+        public int Shield { get; set; }
+        public string RobotCommands { get; set; }
+
+        public static IEnumerable<TestData> GetProblemTests()
+        {
+            var tests = new List<TestData>();
+            tests.Add(new TestData
+            {
+                Shield = 1,
+                RobotCommands = "CS"
+            });
+            tests.Add(new TestData
+            {
+                Shield = 2,
+                RobotCommands = "CS"
+            });
+            tests.Add(new TestData
+            {
+                Shield = 1,
+                RobotCommands = "SS"
+            });
+            tests.Add(new TestData
+            {
+                Shield = 6,
+                RobotCommands = "SCCSSC"
+            });
+            tests.Add(new TestData
+            {
+                Shield = 2,
+                RobotCommands = "CC"
+            });
+            tests.Add(new TestData
+            {
+                Shield = 3,
+                RobotCommands = "CSCSS"
+            });
+
+            return tests;
+        }
+    }
+
+    public class ImpossibleException : Exception { }
 }
