@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeJam.Shared", "CodeJam.Shared\CodeJam.Shared.csproj", "{98C14990-2445-4F0A-9FF6-4C7706C21A23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeJam.2018", "CodeJam.2018\CodeJam.2018.csproj", "{62553BF6-F337-4FCC-8D63-34802B77F7A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeJam.Year2018", "CodeJam.2018\CodeJam.Year2018.csproj", "{62553BF6-F337-4FCC-8D63-34802B77F7A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
