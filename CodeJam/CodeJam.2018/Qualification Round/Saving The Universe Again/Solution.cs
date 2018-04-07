@@ -13,9 +13,7 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
         static void Main(string[] args)
         {
             var probleQR1 = new Solution(Console.In, Console.Out);
-            probleQR1.Start();
-
-            Console.ReadKey();
+            probleQR1.Start();            
         }
     }
 
@@ -24,13 +22,13 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
         private readonly TextReader input;
         private readonly TextWriter output;
 
-        private readonly Regex testCaseRegex = new Regex(@"(?<Shield>\d)+\s(?<RobotCommands>[SC]+)");
+        private readonly Regex testCaseRegex = new Regex(@"(?<Shield>\d+)\s(?<RobotCommands>[SC]+)");
 
-        public int TestNumber { get; set; }
-        public int HacksNumber { get; set; }
-        public int RobotPower { get; set; }
+        public ulong TestNumber { get; set; }
+        public ulong HacksNumber { get; set; }
+        public ulong RobotPower { get; set; }
         public StringBuilder RobotCommands { get; set; }
-        public int Shield { get; set; }
+        public ulong Shield { get; set; }
 
         public Solution(TextReader input, TextWriter output)
         {
@@ -40,12 +38,10 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
 
         public void Start()
         {
-            int testCasesNumber = int.Parse(input.ReadLine());
+            ulong testCasesNumber = ulong.Parse(input.ReadLine());
 
-            for (TestNumber = 0; TestNumber <= testCasesNumber; TestNumber++)
+            for (TestNumber = 1; TestNumber <= testCasesNumber; TestNumber++)
             {
-                TestNumber++;
-
                 var line = input.ReadLine();
                 var test = ConstructTestData(line);
 
@@ -58,7 +54,7 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
             var match = testCaseRegex.Match(stringData);
             return new TestData
             {
-                Shield = int.Parse(match.Groups["Shield"].Value),
+                Shield = ulong.Parse(match.Groups["Shield"].Value),
                 RobotCommands = match.Groups["RobotCommands"].Value
             };
         }
@@ -77,7 +73,7 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
                 }
                 catch (ImpossibleException)
                 {
-                    HacksNumber = -1;
+                    HacksNumber = ulong.MaxValue;
                     break;
                 }
             }
@@ -128,8 +124,8 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
 
         private bool CanWeSurvive()
         {
-            int currentShield = Shield;
-            int currectRobotPower = RobotPower;
+            ulong currentShield = Shield;
+            ulong currectRobotPower = RobotPower;
 
             for (var i = 0; i < RobotCommands.Length; i++)
             {
@@ -137,7 +133,7 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
 
                 else if (RobotCommands[i] == 'S') currentShield -= currectRobotPower;
 
-                if (currentShield < 0) return false;
+                if (currentShield == ulong.MaxValue) return false;
             }
 
             return true;
@@ -153,16 +149,15 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
 
         private void PrintSolution()
         {
-            var solution = HacksNumber < 0 ? "IMPOSSIBLE" : HacksNumber.ToString();
+            var solution = HacksNumber == ulong.MaxValue ? "IMPOSSIBLE" : HacksNumber.ToString();
             output.WriteLine($"Case #{TestNumber}: {solution}");
         }
 
     }
 
-
     public class TestData
     {
-        public int Shield { get; set; }
+        public ulong Shield { get; set; }
         public string RobotCommands { get; set; }
 
         public static IEnumerable<TestData> GetProblemTests()
