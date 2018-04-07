@@ -7,15 +7,15 @@ using System.Text.RegularExpressions;
 namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
 {
 
-    public class Program
-    {
+    //public class Program
+    //{
 
-        static void Main(string[] args)
-        {
-            var probleQR1 = new Solution(Console.In, Console.Out);
-            probleQR1.Start();            
-        }
-    }
+    //    static void Main(string[] args)
+    //    {
+    //        var probleQR1 = new Solution(Console.In, Console.Out);
+    //        probleQR1.Start();            
+    //    }
+    //}
 
     public class Solution
     {
