@@ -87,12 +87,12 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
             if (RobotCommands.Length < 2) throw new ImpossibleException();
             if (!CanRobotBeHacked()) throw new ImpossibleException();
 
-            for (var i = 1; i < RobotCommands.Length; i++)
+            for (var i = RobotCommands.Length - 2; i >= 0; i--)
             {
-                if (RobotCommands[i] == 'S' && RobotCommands[i - 1] == 'C')
+                if (RobotCommands[i] == 'C' && RobotCommands[i + 1] == 'S')
                 {
-                    RobotCommands[i] = 'C';
-                    RobotCommands[i - 1] = 'S';
+                    RobotCommands[i] = 'S';
+                    RobotCommands[i + 1] = 'C';
                     HacksNumber++;
                     break;
                 }
@@ -131,9 +131,12 @@ namespace CodeJam.Year2018.Qualification_Round.Saving_The_Universe_Again
             {
                 if (RobotCommands[i] == 'C') currectRobotPower *= 2;
 
-                else if (RobotCommands[i] == 'S') currentShield -= currectRobotPower;
+                else if (RobotCommands[i] == 'S')
+                {
+                    if (currectRobotPower > currentShield) return false;
 
-                if (currentShield == ulong.MaxValue) return false;
+                    currentShield -= currectRobotPower;
+                }
             }
 
             return true;
