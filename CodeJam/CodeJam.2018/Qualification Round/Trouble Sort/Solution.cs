@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -37,26 +38,71 @@ namespace CodeJam.Year2018.Qualification_Round.Trouble_Sort
 
             for (TestNumber = 1; TestNumber <= testCasesNumber; TestNumber++)
             {
-                //var line = input.ReadLine();
-                //var test = ConstructTestData(line);
+                var numbersInList = uint.Parse(input.ReadLine());
+                var numbersList = input.ReadLine();
+                var test = ConstructTestData(numbersInList, numbersList);
 
-                //Solve(test);
+                Solve(test);
             }
         }
 
-        private void Solve()
+        private uint[] ConstructTestData(uint count, string stringNumberList)
         {
-
-            PrintSolution();
+            return stringNumberList.Split(' ').Select(n => uint.Parse(n)).ToArray();
         }
 
-        private void PrintSolution()
+        private void Solve(uint[] numbersList)
         {
-            var solution = "";
+            while (true)
+            {
+                if (!OrderList(numbersList))
+                {
+                    break;
+                }
+            }
+
+            var errorPosition = FindErrorInSortedList(numbersList);
+
+            PrintSolution(errorPosition);
+        }
+
+        private int FindErrorInSortedList(uint[] numbersList)
+        {
+            for (var i = 0; i < numbersList.Length - 1; i++)
+            {
+                if (numbersList[i] > numbersList[i + 1]) return i;
+            }
+
+            return -1;
+        }
+
+        private bool OrderList(uint[] numbersList)
+        {
+            bool wasListSorted = false;
+            var endPosition = numbersList.Length - 2;
+            for (var i = 0; i < endPosition; i++)
+            {
+                wasListSorted = wasListSorted || SwapNumbers(i, i + 2, numbersList);
+            }
+            return wasListSorted;
+        }
+
+        private bool SwapNumbers(int startPosition, int endPosition, uint[] numbersList)
+        {
+            if (numbersList[startPosition] <= numbersList[endPosition]) return false;
+            var temp = numbersList[startPosition];
+            numbersList[startPosition] = numbersList[endPosition];
+            numbersList[endPosition] = temp;
+            return true;
+        }
+
+        private void PrintSolution(int errorPosition)
+        {
+            var solution = errorPosition == -1 ? "OK" : errorPosition.ToString() ;
             output.WriteLine($"Case #{TestNumber}: {solution}");
         }
 
     }
-    
+
     public class ImpossibleException : Exception { }
 }
